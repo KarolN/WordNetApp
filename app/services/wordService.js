@@ -40,7 +40,9 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout", "ws
                 return checkTaskProgress(response.data)
             }).then(function(data){
                 getProcessedData(data.value[0].fileID).then(function (response){
-                   return wsdXmlParsingService.parseWsdXml(response.data);
+                   return wsdXmlParsingService.parseWsdXml(response.data).then(function(data){
+                        console.log(data);
+                   });
            });
         });
     }
