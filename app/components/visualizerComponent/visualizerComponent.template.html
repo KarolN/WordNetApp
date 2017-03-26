@@ -1,4 +1,4 @@
-<div class="loader-box">
+<div class="loader-box" ng-if="loader" >
     <div class="loader-title">
         Przetwarzanie
     </div>
@@ -7,5 +7,13 @@
         <span></span>
         <span></span>
     </div>
+
 </div>
-<div>{{$scope.data}}</div>
+<div class="visualizer-box" ng-if="!loader">
+    <div class="row">
+        <div class="col-xs-2">
+            <button ng-click="redirect()" class="btn btn-primary btn-block btn-flat btn-return">Powrót</button>
+        </div>
+    </div>
+    <div class="visualizer" id="wordNetwork"/>
+</div>
