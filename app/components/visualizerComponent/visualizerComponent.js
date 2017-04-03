@@ -8,45 +8,49 @@ function VisualizerComponentController ($scope, wordService, graphService, $time
         {
             id: 1,
             group: "domena1",
-            shape: "diamond",
-            title: "slowo",
-            size: 5
+            label: "slowo",
+            value: 10
         },
         {
             id: 2,
             group: "domena2",
-            shape: "diamond",
-            size: 10
+            label: 'slowo',
+            value: 80
         },
         {
             id: 3,
             group: "domena1",
-            shape: "dot",
-            size: 15
+            shape: "circle",
+            label: "synset",
+            value: 50
         },
         {
             id: 4,
             group: "domena1",
-            shape: "dot",
-            size: 20
+            shape: "circle",
+            label: "synset",
+            value: 5
         },
         {
             id: 5,
             group: "domena1",
-            shape: "dot",
-            size: 40
+            shape: "circle",
+            label: "synset",
+            value: 20
         },
         {
             id: 6,
             group: "domena2",
-            shape: "dot",
-            size: 30
+            shape: "circle",
+            label: "synset",
+            value: 100
         },
         {
             id: 7,
             group: "domena2",
-            shape: "dot",
-            size: 25
+            shape: "circle",
+            label: "synset",
+            value: 10
         },
     ];
     $scope.edges = [
@@ -94,6 +98,12 @@ function VisualizerComponentController ($scope, wordService, graphService, $time
         },
         nodes: {
           //  physics: false,
+          scaling:{
+            label: {
+              min:10,
+              max:25
+            }
+          }
         },
         interaction: {
             navigationButtons: true
