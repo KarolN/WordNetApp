@@ -26,6 +26,7 @@ angular.module("wordApp").factory("wsdXmlParsingService", ["$q", function($q){
         _.each(parsedObject.chunkList.chunk, function(chunk){
             _.each(chunk.sentence.tok, function(tok){
                 var word = {
+                    id: tok.lex.base.hashCode(),
                     name: tok.lex.base,
                     synsets: []
                 };

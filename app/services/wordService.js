@@ -26,8 +26,8 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout", "ws
             }).then(function (data) {
                 dataService.getProcessedData(data.value[0].fileID).then(function (response) {
                     return wsdXmlParsingService.parseWsdXml(response.data).then(function (data) {
-                        dataService.getSynsets(synsetService.parseSynsetsIds(data)).then(function(response){
-                            console.log(response.data);
+                        synsetService.fetchAndParseSynsets(data).then(function (dataWithNames){
+                            console.log(dataWithNames);
                         });
                     });
                 });

@@ -5,6 +5,7 @@ angular.module("wordApp").factory("dataService", ["$q", "$http", function ($q, $
     function getSynsets(query) {
         return $http.post(baseApi + "/api/values/GetSynsets", query);
     };
+    
     function getProcessedData(path) {
         return $http.get(baseApi + "/api/values/DownloadWsd?fileId=" + path);
     };
@@ -17,11 +18,17 @@ angular.module("wordApp").factory("dataService", ["$q", "$http", function ($q, $
         return $http.post(baseApi + "/api/values/StartTast", query);
     };
 
+    function getWordsIds(query) {
+        return $http.post(baseApi + "/api/values/words", query);
+    };
+
+
     return {
         getSynsets: getSynsets,
         getProcessedData: getProcessedData,
         getProgressData: getProgressData,
-        sendDataForProcessing: sendDataForProcessing
+        sendDataForProcessing: sendDataForProcessing,
+        getWordsIds: getWordsIds
     }
 
 }]);
