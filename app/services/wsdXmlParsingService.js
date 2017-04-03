@@ -39,7 +39,9 @@ angular.module("wordApp").factory("wsdXmlParsingService", ["$q", function ($q) {
     function getWordsWithData(parsedObject) {
         var result = [];
         console.log(parsedObject);
-        _.each(parsedObject.chunkList, function (chunk) {
+        console.log(parsedObject.chunkList.length);
+        var chunks = parsedObject.chunkList.chunk.length > 1 ? parsedObject.chunkList.chunk : parsedObject.chunkList;
+        _.each(chunks, function (chunk) {
             _.each(chunk.sentence.tok, function (tok) {
                 var foundWord = _.find(result, function (resultWord) {
                     return resultWord.name === tok.lex.base;
