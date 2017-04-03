@@ -3,7 +3,30 @@ $icon-font-path: "app/bower_components/bootstrap-sass/assets/fonts/bootstrap/";
 
 body {
   background: #d2d6de;
+  overflow: hidden;
 
+  .btn.btn-flat {
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 1px;
+  }
+
+  //Visualization
+  .visualizer-box {
+    .btn-return{
+      margin: 10px;
+    }
+
+    .visualizer{
+      position: fixed;
+      top: 55px;
+      bottom: 0px;
+      left: 0px;
+      right: 0px;
+    }
+  }
+
+  //MainPage
   .input-box {
     margin: 7% auto;
     width: 560px;
@@ -31,15 +54,10 @@ body {
         resize: none;
         min-height: 150px;
       }
-
-      .btn.btn-flat {
-        border-radius: 0;
-        box-shadow: none;
-        border-width: 1px;
-      }
     }
   }
 
+  //Loader
   .loader-box {
     margin: 7% auto;
     width: 320px;

@@ -11,7 +11,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
-  <link rel="stylesheet" href="assets/css/site.css">
+    <link href="bower_components/vis/dist/vis.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="assets/css/site.css">
   <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
 <body ng-app="wordApp">
@@ -27,14 +28,15 @@
   <script src="xml2json.js"></script>
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/lodash/dist/lodash.js"></script>
+  <script type="text/javascript" src="bower_components/vis/dist/vis.js"></script>
   <script src="app.js"></script>
   <script src="components/startComponent/startComponent.js"></script>
   <script src="components/mainPageComponent/mainPageComponent.js"></script>
   <script src="components/visualizerComponent/visualizerComponent.js"></script>
   <script src="services/wordService.js"></script>
+  <script src="services/graphService.js"></script>
   <script src="services/wsdXmlParsingService.js"></script>
   <script src="services/synsetService.js"></script>
   <script src="services/dataService.js"></script>
-  
 </body>
 </html>

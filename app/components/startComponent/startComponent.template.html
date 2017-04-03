@@ -1,3 +1,4 @@
-<main-page-component/>
-<!--
-<visualizer-component/>-->
+
+<main-page-component ng-if="!visualizeData" on-text-submit="onTextSubmit(textToAnalize)"></main-page-component>
+
+<visualizer-component ng-if="visualizeData" on-redirect="onRedirect()" text-to-visualize="textToAnalize"/>

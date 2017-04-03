@@ -2,7 +2,17 @@
  * Created by karol on 26.03.17.
  */
 function StartComponentController($scope, wordService) {
-    $scope.data = wordService.getWordData();
+    $scope.visualizeData = false;
+    $scope.textToAnalize = "";
+
+    $scope.onTextSubmit = function(text){
+        $scope.textToAnalize = text;
+        $scope.visualizeData = true;
+    }
+
+    $scope.onRedirect = function(){
+        $scope.visualizeData = false;
+    }
 }
 
 angular.module("wordApp").component("startComponent", {

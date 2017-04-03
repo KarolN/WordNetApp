@@ -7,11 +7,11 @@
             Wprowadź tekst do analizy...
         </p>
         <div class="form-group">
-            <textarea class="form-control"></textarea>
+            <textarea ng-model="textToSubmit" class="form-control"></textarea>
         </div>
         <div class="row">
             <div class="col-xs-offset-8 col-xs-4">
-                <button class="btn btn-primary btn-block btn-flat">Analizuj</button>
+                <button ng-click="submit()" class="btn btn-primary btn-block btn-flat">Analizuj</button>
             </div>
         </div>
     </div>

@@ -238,8 +238,8 @@ th {
 
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url("../fonts/bootstrap/glyphicons-halflings-regular.eot");
-  src: url("../fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/bootstrap/glyphicons-halflings-regular.woff2") format("woff2"), url("../fonts/bootstrap/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/bootstrap/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"); }
+  src: url("app/bower_components/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.eot");
+  src: url("app/bower_components/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("app/bower_components/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.woff2") format("woff2"), url("app/bower_components/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.woff") format("woff"), url("app/bower_components/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.ttf") format("truetype"), url("app/bower_components/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"); }
 
 .glyphicon {
   position: relative;
@@ -5813,3 +5813,78 @@ button.close {
 @media print {
   .hidden-print {
     display: none !important; } }
+
+body {
+  background: #d2d6de;
+  overflow: hidden; }
+  body .btn.btn-flat {
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 1px; }
+  body .visualizer-box .btn-return {
+    margin: 10px; }
+  body .visualizer-box .visualizer {
+    position: fixed;
+    top: 55px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px; }
+  body .input-box {
+    margin: 7% auto;
+    width: 560px; }
+    body .input-box .input-title {
+      font-size: 35px;
+      text-align: center;
+      margin-bottom: 25px;
+      font-weight: 300; }
+    body .input-box .input-box-body {
+      background: whitesmoke;
+      padding: 20px;
+      border-top: 0;
+      color: #666; }
+      body .input-box .input-box-body .input-box-msg {
+        margin: 0;
+        text-align: center;
+        padding: 0 20px 20px 20px; }
+      body .input-box .input-box-body textarea {
+        resize: none;
+        min-height: 150px; }
+  body .loader-box {
+    margin: 7% auto;
+    width: 320px; }
+    body .loader-box .loader-title {
+      font-size: 35px;
+      text-align: center;
+      margin-bottom: 25px;
+      font-weight: 300; }
+    body .loader-box .loader {
+      width: 100px;
+      height: 100px;
+      border-radius: 100%;
+      position: relative;
+      margin: 0 auto; }
+    body .loader-box #loader-2 span {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 100%;
+      background-color: #3498db;
+      margin: 35px 5px; }
+    body .loader-box #loader-2 span:nth-child(1) {
+      animation: bounce 1s ease-in-out infinite; }
+    body .loader-box #loader-2 span:nth-child(2) {
+      animation: bounce 1s ease-in-out 0.33s infinite; }
+    body .loader-box #loader-2 span:nth-child(3) {
+      animation: bounce 1s ease-in-out 0.66s infinite; }
+
+@keyframes bounce {
+  0%, 75%, 100% {
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    -o-transform: translateY(0);
+    transform: translateY(0); }
+  25% {
+    -webkit-transform: translateY(-20px);
+    -ms-transform: translateY(-20px);
+    -o-transform: translateY(-20px);
+    transform: translateY(-20px); } }
