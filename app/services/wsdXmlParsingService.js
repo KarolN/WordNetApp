@@ -11,13 +11,13 @@ angular.module("wordApp").factory("wsdXmlParsingService", ["$q", function($q){
     function parseSynsRank(text){
         var synsets = [];
 
-        var idAndProbs = text.indexOf(" ") != -1 ? text.split(" ") : [text];
+        var idAndProbs = text.indexOf(" ") !== -1 ? text.split(" ") : [text];
         
         _.each(idAndProbs, function(item){
             var idAndProb = item.split("/");
             var synset = {id: idAndProb[0], probability :idAndProb[1]};
             synsets.push(synset);          
-        })
+        });
         return synsets;
     }
 
