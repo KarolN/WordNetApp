@@ -4,47 +4,49 @@
 function VisualizerComponentController ($scope, wordService, graphService, $timeout) {
     var self = this;
     $scope.loader = true;
-
-    $scope.redirect = function () {
-        self.onRedirect();
-    }
-
     $scope.nodes = [
         {
             id: 1,
-            label: "słowo",
             group: "domena1",
-            title: "booo"
+            shape: "diamond",
+            title: "slowo",
+            size: 5
         },
         {
             id: 2,
-            label: "słowo",
             group: "domena2",
+            shape: "diamond",
+            size: 10
         },
         {
             id: 3,
-            label: "synset",
-            group: "domena1"
+            group: "domena1",
+            shape: "dot",
+            size: 15
         },
         {
             id: 4,
-            label: "synset",
-            group: "domena1"
+            group: "domena1",
+            shape: "dot",
+            size: 20
         },
         {
             id: 5,
-            label: "synset",
-            group: "domena1"
+            group: "domena1",
+            shape: "dot",
+            size: 40
         },
         {
             id: 6,
-            label: "synset",
-            group: "domena2"
+            group: "domena2",
+            shape: "dot",
+            size: 30
         },
         {
             id: 7,
-            label: "synset",
-            group: "domena2"
+            group: "domena2",
+            shape: "dot",
+            size: 25
         },
     ];
     $scope.edges = [
@@ -80,38 +82,40 @@ function VisualizerComponentController ($scope, wordService, graphService, $time
         }
     ];
 
-
-    var nodesDataset = new vis.DataSet($scope.nodes);
-    var edges = new vis.DataSet($scope.edges);
-
     var data = {
-        nodes: nodesDataset,
-        edges: edges
+        nodes: new vis.DataSet($scope.nodes),
+        edges: new vis.DataSet($scope.edges)
     };
 
     var options = {
         edges: {
-           // smooth: false
+          //  smooth: false,
+          //  length: 1000
         },
         nodes: {
           //  physics: false,
-            //mass: 10
         },
         interaction: {
             navigationButtons: true
         }
     };
 
+    this.createGraph = function(loader){
+      if(!loader) {
+          $timeout(function() {
+              var container = document.getElementById('wordNetwork');
+              graphService.runGraph(container, data, options);
+          }, 1);
+      };
+    }
+
     $scope.$watch(function(){
         return $scope.loader;
-    }, function (newVal) {
-        if(!newVal) {
-            $timeout(function() {
-                var container = document.getElementById('wordNetwork');
-                graphService.runGraph(container, data, options);
-            })
-        }
-    })
+    }, self.createGraph);
+
+    $scope.redirect = function () {
+        self.onRedirect();
+    }
 
     this.$onInit = function() {
         $timeout(function(){

@@ -10,29 +10,41 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout", "ws
                 .then(function (response) {
                     if (response.data.status !== "DONE") {
                         $timeout(function () {
-                            return checkTaskProgress(id).then(function (data) { resolve(data); });
+                            return checkTaskProgress(id).then(function (data) {
+                                resolve(data);
+                            });
                         }, 60);
                     } else {
                         resolve(response.data);
                     }
                 })
         });
-    };
+    }
+
+    function removePunctuationMarks(textToAnalize) {
+        var replacedText = textToAnalize.replace(/[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]|\\|[0-9]/g, "");
+        console.log("removePunctuationMarks: " + replacedText);
+        return replacedText;
+    }
 
     function getWordData(textToAnalize) {
-        dataService.sendDataForProcessing({ "lpmn": "any2txt|wcrft2({\"morfeusz2\":false})|wsd", "text": textToAnalize })
+        var textToAnalizeNoMarks = removePunctuationMarks(textToAnalize);
+        dataService.sendDataForProcessing({
+            "lpmn": "any2txt|wcrft2({\"morfeusz2\":false})|wsd",
+            "text": textToAnalizeNoMarks
+        })
             .then(function (response) {
                 return checkTaskProgress(response.data)
             }).then(function (data) {
                 dataService.getProcessedData(data.value[0].fileID).then(function (response) {
                     return wsdXmlParsingService.parseWsdXml(response.data).then(function (data) {
-                        synsetService.fetchAndParseSynsets(data).then(function (dataWithNames){
+                        synsetService.fetchAndParseSynsets(data).then(function (dataWithNames) {
                             console.log(dataWithNames);
                         });
                     });
                 });
             });
-    };
+    }
 
     return {
         getWordData: getWordData
