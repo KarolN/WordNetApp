@@ -20,11 +20,19 @@ angular.module("wordApp").factory("wsdXmlParsingService", ["$q", function ($q) {
     }
 
     function createNewWord(tok) {
+        if(tok.lex.length > 1){
+        var word = {
+            name: tok.lex[0].base,
+            id: tok.lex[0].base.hashCode(),
+            count: 1
+        };
+        }else{
         var word = {
             name: tok.lex.base,
             id: tok.lex.base.hashCode(),
             count: 1
         };
+    }
         _.each(tok.prop, function (prop) {
             if (prop._key === "sense:ukb:syns_rank") {
                 word.synsets = parseSynsRank(prop.__text);
@@ -39,9 +47,14 @@ angular.module("wordApp").factory("wsdXmlParsingService", ["$q", function ($q) {
 
     function getWordsWithData(parsedObject) {
         var result = [];
-        console.log(parsedObject);
-        console.log(parsedObject.chunkList.length);
         var chunks = parsedObject.chunkList.chunk.length > 1 ? parsedObject.chunkList.chunk : parsedObject.chunkList;
+        
+        if(!parsedObject.chunkList.chunk.length || parsedObject.chunkList.chunk.length > 1){
+                 _.each(chunks, function (chunk) {   
+        chunk.sentence.tok = [].concat(chunk.sentence.tok);
+                 });
+        }
+    
         _.each(chunks, function (chunk) {
             _.each(chunk.sentence.tok, function (tok) {
                 var foundWord = _.find(result, function (resultWord) {

@@ -1,6 +1,6 @@
 angular.module("wordApp").factory("dataService", ["$q", "$http", function ($q, $http) {
 
-    var baseApi = "http://localhost:5000";
+    var baseApi = "http://localhost:64729";
 
     function getSynsets(query) {
         return $http.post(baseApi + "/api/values/GetSynsets", query);
