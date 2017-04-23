@@ -27,23 +27,81 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout", "ws
         return replacedText;
     }
 
+    function mapWordFromApiToGraphNode(word){
+        return {
+            id: word.id,
+            shape: "circle",
+            label: word.name,
+            group: "word",
+            value: word.count,
+
+        };
+    }
+
+    function insertSynsetFromApiToGraphNodes(synset, nodes){
+        var existingInCollection = _.find(nodes, function(node){
+            return node.id === synset.id;
+        });
+
+        if(existingInCollection){
+            existingInCollection.count++;
+        } else {
+            nodes.push({
+                id: synset.id,
+                shape: "circle",
+                label: synset.id,
+                group: "synset",
+                value: 1,
+            });
+        }
+    }
+
+    function createRelationBetweenWordAndSynset(word, synset){
+        return {
+            from: word.id,
+            to: synset.id,
+            width: synset.probability * 5
+        };
+    }
+
+    function mapRetrievedDataToViusualizeStructure(data){
+        var mappedData = {
+            nodes: [],
+            edges: []
+        };
+
+        _.each(data, function(word){
+            mappedData.nodes.push(mapWordFromApiToGraphNode(word));
+            _.each(word.synsets, function(synset) {
+                insertSynsetFromApiToGraphNodes(synset, mappedData.nodes);
+                mappedData.edges.push(createRelationBetweenWordAndSynset(word, synset));
+            });
+
+        });
+
+        return mappedData;
+    }
+
     function getWordData(textToAnalize) {
-        var textToAnalizeNoMarks = removePunctuationMarks(textToAnalize);
-        dataService.sendDataForProcessing({
-            "lpmn": "any2txt|wcrft2({\"morfeusz2\":false})|wsd",
-            "text": textToAnalizeNoMarks
-        })
-            .then(function (response) {
-                return checkTaskProgress(response.data)
-            }).then(function (data) {
+        return $q(function(resolve, reject) {
+            var textToAnalizeNoMarks = removePunctuationMarks(textToAnalize);
+            dataService.sendDataForProcessing({
+                "lpmn": "any2txt|wcrft2({\"morfeusz2\":false})|wsd",
+                "text": textToAnalizeNoMarks
+            })
+                .then(function (response) {
+                    return checkTaskProgress(response.data)
+                }).then(function (data) {
                 dataService.getProcessedData(data.value[0].fileID).then(function (response) {
                     return wsdXmlParsingService.parseWsdXml(response.data).then(function (data) {
                         synsetService.fetchAndParseSynsets(data).then(function (dataWithNames) {
-                            console.log(dataWithNames);
+                            var dataToVisualize = mapRetrievedDataToViusualizeStructure(dataWithNames);
+                            resolve(dataToVisualize);
                         });
                     });
                 });
             });
+        });
     }
 
     return {

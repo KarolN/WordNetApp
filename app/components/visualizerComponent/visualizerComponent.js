@@ -2,12 +2,8 @@ function VisualizerComponentController ($scope, wordService, mockService, graphS
 
     var self = this;
     $scope.loader = true;
-    let mockData = mockService.getMockData();
 
-    var data = {
-        nodes: new vis.DataSet(mockData.nodes),
-        edges: new vis.DataSet(mockData.edges)
-    };
+    var data = {};
 
     var options = {
         edges: {
@@ -37,18 +33,16 @@ function VisualizerComponentController ($scope, wordService, mockService, graphS
       };
     }
 
-    $scope.$watch(function(){
-        return $scope.loader;
-    }, self.createGraph);
-
     $scope.redirect = function () {
         self.onRedirect();
     }
 
     this.$onInit = function() {
-        $timeout(function(){
+        wordService.getWordData(this.textToVisualize).then(function(loadedData){
             $scope.loader = false;
-        }, 1000);
+            data = loadedData;
+            self.createGraph($scope.loader);
+        });
     }
 }
 
