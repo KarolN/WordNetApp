@@ -40,7 +40,7 @@ function VisualizerComponentController ($scope, wordService, mockService, graphS
     this.$onInit = function() {
         wordService.getWordData(this.textToVisualize).then(function(loadedData){
             $scope.loader = false;
-            data = loadedData;
+            data = {edges: new vis.DataSet(loadedData.edges), nodes: new vis.DataSet(loadedData.nodes)};
             self.createGraph($scope.loader);
         });
     }
