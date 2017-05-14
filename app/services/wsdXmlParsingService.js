@@ -30,7 +30,8 @@ angular.module("wordApp").factory("wsdXmlParsingService", ["$q", function ($q) {
         var word = {
             name: tok.lex.base,
             id: tok.lex.base.hashCode(),
-            count: 1
+            count: 1,
+            nextWords: []
         };
     }
         _.each(tok.prop, function (prop) {
@@ -45,6 +46,14 @@ angular.module("wordApp").factory("wsdXmlParsingService", ["$q", function ($q) {
         foundWord.count += 1;
     }
 
+    function addSenteceRelations(previousWord, currentWord){
+        previousWord.nextWords.push(currentWord);
+    }
+
+    function isInterpunctinalSign(sign){
+        return sign === "." || sign === "," || sign === "?" || sign === "!";
+    }
+
     function getWordsWithData(parsedObject) {
         var result = [];
         var chunks = parsedObject.chunkList.chunk.length > 1 ? parsedObject.chunkList.chunk : parsedObject.chunkList;
@@ -56,15 +65,32 @@ angular.module("wordApp").factory("wsdXmlParsingService", ["$q", function ($q) {
         }
     
         _.each(chunks, function (chunk) {
+            var previousWord;
             _.each(chunk.sentence.tok, function (tok) {
+                var currentWord;
+                if(isInterpunctinalSign(tok.lex.base)){
+                    if(tok.lex.base !== ","){
+                        previousWord = undefined;
+                    }
+                    return;
+                }
                 var foundWord = _.find(result, function (resultWord) {
                     return resultWord.name === tok.lex.base;
                 });
                 if (foundWord) {
+                    currentWord = foundWord;
                     incrementWordCount(foundWord);
                 } else {
                     var word = createNewWord(tok);
                     result.push(word);
+                    currentWord = word;
+                }
+                if(previousWord){
+                    addSenteceRelations(previousWord, currentWord);
+                }
+                previousWord = currentWord;
+                if(currentWord === "." || currentWord === "?" || currentWord === "!"){
+                    previousWord = undefined;
                 }
             });
         });

@@ -64,6 +64,15 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout", "ws
         };
     }
 
+    function createRelationBetweenWordAndNextWordInSentence(word, next){
+        return {
+            from: word.id,
+            to: next.id,
+            width: 2,
+            color: "#FF0000"
+        };
+    }
+
     function mapRetrievedDataToViusualizeStructure(data){
         var mappedData = {
             nodes: [],
@@ -72,6 +81,9 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout", "ws
 
         _.each(data, function(word){
             mappedData.nodes.push(mapWordFromApiToGraphNode(word));
+            _.each(word.nextWords, function(nextWord){
+                mappedData.edges.push(createRelationBetweenWordAndNextWordInSentence(word, nextWord));
+            });
             _.each(word.synsets, function(synset) {
                 insertSynsetFromApiToGraphNodes(synset, mappedData.nodes);
                 mappedData.edges.push(createRelationBetweenWordAndSynset(word, synset));
@@ -84,7 +96,7 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout", "ws
 
     function getWordData(textToAnalize) {
         return $q(function(resolve, reject) {
-            var textToAnalizeNoMarks = removePunctuationMarks(textToAnalize);
+            var textToAnalizeNoMarks = textToAnalize;//removePunctuationMarks(textToAnalize);
             dataService.sendDataForProcessing({
                 "lpmn": "any2txt|wcrft2({\"morfeusz2\":false})|wsd",
                 "text": textToAnalizeNoMarks
@@ -94,6 +106,7 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout", "ws
                 }).then(function (data) {
                 dataService.getProcessedData(data.value[0].fileID).then(function (response) {
                     return wsdXmlParsingService.parseWsdXml(response.data).then(function (data) {
+                        console.log(data);
                         synsetService.fetchAndParseSynsets(data).then(function (dataWithNames) {
                             var dataToVisualize = mapRetrievedDataToViusualizeStructure(dataWithNames);
                             resolve(dataToVisualize);
@@ -106,5 +119,5 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout", "ws
 
     return {
         getWordData: getWordData
-    }
+    };
 }]);
