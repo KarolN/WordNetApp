@@ -8,7 +8,6 @@ angular.module("wordApp").factory("graphService", ["$timeout", function($timeout
 
     function neighbourhoodHighlight(params) {
         var allNodes = nodesDataset.get({returnType: "Object"});
-
         if (params.nodes.length > 0) {
             highlightActive = true;
             var selectedNode = params.nodes[0];

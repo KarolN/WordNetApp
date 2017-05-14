@@ -30,11 +30,10 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout", "ws
     function mapWordFromApiToGraphNode(word){
         return {
             id: word.id,
-            shape: "circle",
+            shape: "ellipse",
             label: word.name,
-            group: "word",
-            value: word.count,
-
+            group: word.domain,
+            value: word.count
         };
     }
 
@@ -48,7 +47,7 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout", "ws
         } else {
             nodes.push({
                 id: synset.id,
-                shape: "circle",
+                shape: "ellipse",
                 label: synset.id,
                 group: "synset",
                 value: 1,

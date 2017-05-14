@@ -1,4 +1,4 @@
-angular.module("wordApp").factory("wsdXmlParsingService", ["$q", function ($q) {
+angular.module("wordApp").factory("wsdXmlParsingService", ["$q", "domainsTableService", function ($q, domainsTableService) {
 
     function parseXml(xml) {
         var x2js = new X2JS();
@@ -19,19 +19,30 @@ angular.module("wordApp").factory("wsdXmlParsingService", ["$q", function ($q) {
         return synsets;
     }
 
+    function getWordDomain(domainText) {
+      var indexOfColon = domainText.indexOf(":");
+      var indexOfEndBracket = domainText.indexOf(")");
+      var key = domainText.substring(indexOfColon+1,indexOfEndBracket);
+      return domainsTableService.domainsTable[key];
+    }
+
     function createNewWord(tok) {
+      var domainText = tok.prop && tok.prop[2] ? tok.prop[2].toString() : ":bhp)";
         if(tok.lex.length > 1){
         var word = {
             name: tok.lex[0].base,
             id: tok.lex[0].base.hashCode(),
-            count: 1
+            count: 1,
+            nextWords: [],
+            domain: getWordDomain(domainText)
         };
         }else{
         var word = {
             name: tok.lex.base,
             id: tok.lex.base.hashCode(),
             count: 1,
-            nextWords: []
+            nextWords: [],
+            domain: getWordDomain(domainText)
         };
     }
         _.each(tok.prop, function (prop) {
@@ -57,13 +68,13 @@ angular.module("wordApp").factory("wsdXmlParsingService", ["$q", function ($q) {
     function getWordsWithData(parsedObject) {
         var result = [];
         var chunks = parsedObject.chunkList.chunk.length > 1 ? parsedObject.chunkList.chunk : parsedObject.chunkList;
-        
+
         if(!parsedObject.chunkList.chunk.length || parsedObject.chunkList.chunk.length > 1){
-                 _.each(chunks, function (chunk) {   
+                 _.each(chunks, function (chunk) {
         chunk.sentence.tok = [].concat(chunk.sentence.tok);
                  });
         }
-    
+
         _.each(chunks, function (chunk) {
             var previousWord;
             _.each(chunk.sentence.tok, function (tok) {
