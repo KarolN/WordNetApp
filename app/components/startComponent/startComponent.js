@@ -8,7 +8,6 @@ function StartComponentController($scope, wordService) {
     $scope.onTextSubmit = function(text){
         $scope.textToAnalize = text;
         $scope.visualizeData = true;
-        wordService.getWordData(text);
     }
 
     $scope.onRedirect = function(){

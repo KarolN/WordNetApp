@@ -2,7 +2,9 @@
  * Created by karol on 26.03.17.
  */
 
-angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout", "wsdXmlParsingService", "synsetService", "dataService", function ($http, $q, $timeout, wsdXmlParsingService, synsetService, dataService) {
+angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout",
+    "wsdXmlParsingService", "synsetService", "dataService", "dataCacheService",
+    function ($http, $q, $timeout, wsdXmlParsingService, synsetService, dataService, dataCacheService) {
 
     function checkTaskProgress(id) {
         return $q(function (resolve, reject) {
@@ -72,7 +74,7 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout", "ws
         };
     }
 
-    function mapRetrievedDataToViusualizeStructure(data){
+    function mapRetrievedDataToViusualizeStructure(data, includeSynsets){
         var mappedData = {
             nodes: [],
             edges: []
@@ -83,35 +85,58 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout", "ws
             _.each(word.nextWords, function(nextWord){
                 mappedData.edges.push(createRelationBetweenWordAndNextWordInSentence(word, nextWord));
             });
-            _.each(word.synsets, function(synset) {
-                insertSynsetFromApiToGraphNodes(synset, mappedData.nodes);
-                mappedData.edges.push(createRelationBetweenWordAndSynset(word, synset));
-            });
+            if(includeSynsets) {
+                _.each(word.synsets, function (synset) {
+                    insertSynsetFromApiToGraphNodes(synset, mappedData.nodes);
+                    mappedData.edges.push(createRelationBetweenWordAndSynset(word, synset));
+                });
+            }
 
         });
 
         return mappedData;
     }
 
-    function getWordData(textToAnalize) {
-        return $q(function(resolve, reject) {
-            var textToAnalizeNoMarks = textToAnalize;//removePunctuationMarks(textToAnalize);
+    var getWordDataInternal = {
+        useCache: function(text, resolve){
+            if(dataCacheService.isDataValid()) {
+                var dataFromCache = dataCacheService.getDataFromCache();
+                resolve(dataFromCache);
+                return;
+            }
+            this.useApi(text, resolve);
+        },
+
+        useApi: function(textToAnalize, resolve){
             dataService.sendDataForProcessing({
                 "lpmn": "any2txt|wcrft2({\"morfeusz2\":false})|wsd",
-                "text": textToAnalizeNoMarks
+                "text": textToAnalize
             })
                 .then(function (response) {
-                    return checkTaskProgress(response.data)
+                    return checkTaskProgress(response.data);
                 }).then(function (data) {
                 dataService.getProcessedData(data.value[0].fileID).then(function (response) {
                     return wsdXmlParsingService.parseWsdXml(response.data).then(function (data) {
                         console.log(data);
                         synsetService.fetchAndParseSynsets(data).then(function (dataWithNames) {
-                            var dataToVisualize = mapRetrievedDataToViusualizeStructure(dataWithNames);
-                            resolve(dataToVisualize);
+                            dataCacheService.putDataIntoCache(dataWithNames);
+                            resolve(dataWithNames);
                         });
                     });
                 });
+            });
+        }
+    }
+
+    function getWordData(textToAnalize, options) {
+        return $q(function(resolve, reject) {
+            var textToAnalizeNoMarks = textToAnalize;//removePunctuationMarks(textToAnalize);
+            var fetchMethod = options.bypassCache ? "useApi": "useCache" ;
+            $q(function(res, rej){
+                getWordDataInternal[fetchMethod](textToAnalize, res);
+            }).then(function(data){
+                var mappedData =  mapRetrievedDataToViusualizeStructure(data, options.includeSynsets);
+                resolve(mappedData);
             });
         });
     }
