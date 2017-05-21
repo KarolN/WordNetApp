@@ -30,12 +30,13 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout",
     }
 
     function mapWordFromApiToGraphNode(word){
+      let count = word.domain === 'bez hiperonimu' ? 1 :  word.count;
         return {
             id: word.id,
             shape: "ellipse",
             label: word.name,
             group: word.domain,
-            value: word.count
+            value: count
         };
     }
 
@@ -45,7 +46,9 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout",
         });
 
         if(existingInCollection){
+          if(existingInCollection.group !== 'bez hiperonimu'){
             existingInCollection.count++;
+          }
         } else {
             nodes.push({
                 id: synset.id,
@@ -74,18 +77,22 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout",
         };
     }
 
-    function mapRetrievedDataToViusualizeStructure(data, includeSynsets){
+    function mapRetrievedDataToViusualizeStructure(data, options){
         var mappedData = {
             nodes: [],
             edges: []
         };
 
-        _.each(data, function(word){
-            mappedData.nodes.push(mapWordFromApiToGraphNode(word));
-            _.each(word.nextWords, function(nextWord){
-                mappedData.edges.push(createRelationBetweenWordAndNextWordInSentence(word, nextWord));
-            });
-            if(includeSynsets) {
+        _.each(data, function(word){debugger;
+            if(options.includeConnectors || word.domain !== 'bez hiperonimu') {
+              mappedData.nodes.push(mapWordFromApiToGraphNode(word));
+              _.each(word.nextWords, function(nextWord){
+                if(nextWord.domain !== 'bez hiperonimu') {
+                  mappedData.edges.push(createRelationBetweenWordAndNextWordInSentence(word, nextWord));
+                }
+              });
+            }
+            if(options.includeSynsets) {
                 _.each(word.synsets, function (synset) {
                     insertSynsetFromApiToGraphNodes(synset, mappedData.nodes);
                     mappedData.edges.push(createRelationBetweenWordAndSynset(word, synset));
@@ -135,7 +142,7 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout",
             $q(function(res, rej){
                 getWordDataInternal[fetchMethod](textToAnalize, res);
             }).then(function(data){
-                var mappedData =  mapRetrievedDataToViusualizeStructure(data, options.includeSynsets);
+                var mappedData =  mapRetrievedDataToViusualizeStructure(data, options);
                 resolve(mappedData);
             });
         });

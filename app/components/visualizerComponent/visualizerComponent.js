@@ -40,7 +40,8 @@ function VisualizerComponentController ($scope, wordService, mockService, graphS
     this.$onInit = function() {
         var loadingOptions = {
             bypassCache : true,
-            includeSynsets: true
+            includeSynsets: true,
+            includeConnectors: false
         };
 
         wordService.getWordData(this.textToVisualize, loadingOptions).then(function(loadedData){
