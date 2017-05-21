@@ -29,14 +29,15 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout",
         return replacedText;
     }
 
-    function mapWordFromApiToGraphNode(word){
+    function mapWordFromApiToGraphNode(word, includeConnectors){
       let count = word.domain === 'bez hiperonimu' ? 1 :  word.count;
         return {
             id: word.id,
             shape: "ellipse",
             label: word.name,
             group: word.domain,
-            value: count
+            value: count,
+            hidden: !includeConnectors && word.domain === 'bez hiperonimu'
         };
     }
 
@@ -83,22 +84,17 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout",
             edges: []
         };
 
-        _.each(data, function(word){debugger;
-            if(options.includeConnectors || word.domain !== 'bez hiperonimu') {
-              mappedData.nodes.push(mapWordFromApiToGraphNode(word));
-              _.each(word.nextWords, function(nextWord){
-                if(nextWord.domain !== 'bez hiperonimu') {
+        _.each(data, function(word){
+            mappedData.nodes.push(mapWordFromApiToGraphNode(word, options.includeConnectors));
+            _.each(word.nextWords, function(nextWord){
                   mappedData.edges.push(createRelationBetweenWordAndNextWordInSentence(word, nextWord));
-                }
-              });
-            }
+            });
             if(options.includeSynsets) {
                 _.each(word.synsets, function (synset) {
                     insertSynsetFromApiToGraphNodes(synset, mappedData.nodes);
                     mappedData.edges.push(createRelationBetweenWordAndSynset(word, synset));
                 });
             }
-
         });
 
         return mappedData;
