@@ -11,9 +11,33 @@
 </div>
 <div class="visualizer-box" ng-if="!loader">
     <div class="row">
-        <div class="col-xs-2">
-            <button ng-click="redirect()" class="btn btn-primary btn-block btn-flat btn-return">Powrót</button>
-        </div>
+        <div class="visualizer" id="wordNetwork"/>      
     </div>
-    <div class="visualizer" id="wordNetwork"/>
+    <div class="row flex-container footer">
+        <div class="flex-column-container col-xs-2">
+            <span class="title"><b>Word</b>APP</span>
+            <button ng-click="redirect()" class="btn btn-primary btn-block btn-flat">Powrót</button>
+        </div>
+        <div class="details-container">
+            <div>
+                <span class="header">
+                    Szczegóły:
+                </span>
+            </div>
+            <div class="margin-top-small">
+                <span>
+                    Grupa: {{nodeGroup}}
+                </span>
+            </div>
+            <div class="margin-top-small">
+                <span>
+                    Nazwa: {{name}}
+                </span>
+            </div>
+        </div>
+        <canvas id="radar" class="chart chart-radar"
+            chart-data="data" chart-options="options" chart-labels="labels">
+        </canvas> 
+    </div>
 </div>
+

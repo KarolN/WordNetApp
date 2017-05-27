@@ -2,8 +2,9 @@ $icon-font-path: "app/bower_components/bootstrap-sass/assets/fonts/bootstrap/";
 @import "bootstrap";
 
 body {
-  background: #d2d6de;
+  background: #c5c5c5;
   overflow: hidden;
+  color: white;
 
   .btn.btn-flat {
     border-radius: 0;
@@ -11,18 +12,54 @@ body {
     border-width: 1px;
   }
 
+  .margin-top-small{
+    margin-top: 5px;
+  }
+
+  .flex-column-container{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .flex-container{
+    display: flex;
+  }
+
   //Visualization
   .visualizer-box {
-    .btn-return{
-      margin: 10px;
-    }
-
     .visualizer{
       position: fixed;
       top: 55px;
       bottom: 0px;
       left: 0px;
       right: 0px;
+    }
+
+    .footer {
+      position: fixed;
+      width: 100%;
+      margin: 0px;
+      background: gray;
+      bottom: 0px;
+      height: 150px;
+
+      .header{
+        font-size: x-large;
+      }
+
+      .details-container{
+        padding: 20px;
+      }
+
+      .btn{
+        margin: auto;
+      }
+
+      .title{
+        text-align: center;
+        margin: auto;
+        font-size: x-large;
+      }
     }
   }
 
@@ -63,7 +100,7 @@ body {
     width: 320px;
 
     .loader-title{
-      font-size: 35px;
+      font-size: 50px;
       text-align: center;
       margin-bottom: 25px;
       font-weight: 300;
@@ -82,7 +119,7 @@ body {
       width: 20px;
       height: 20px;
       border-radius: 100%;
-      background-color: #3498db;
+      background-color: white;
       margin: 35px 5px;
     }
 

@@ -5815,20 +5815,43 @@ button.close {
     display: none !important; } }
 
 body {
-  background: #d2d6de;
-  overflow: hidden; }
+  background: #c5c5c5;
+  overflow: hidden;
+  color: white; }
   body .btn.btn-flat {
     border-radius: 0;
     box-shadow: none;
     border-width: 1px; }
-  body .visualizer-box .btn-return {
-    margin: 10px; }
+  body .margin-top-small {
+    margin-top: 5px; }
+  body .flex-column-container {
+    display: flex;
+    flex-direction: column; }
+  body .flex-container {
+    display: flex; }
   body .visualizer-box .visualizer {
     position: fixed;
     top: 55px;
     bottom: 0px;
     left: 0px;
     right: 0px; }
+  body .visualizer-box .footer {
+    position: fixed;
+    width: 100%;
+    margin: 0px;
+    background: gray;
+    bottom: 0px;
+    height: 150px; }
+    body .visualizer-box .footer .header {
+      font-size: x-large; }
+    body .visualizer-box .footer .details-container {
+      padding: 20px; }
+    body .visualizer-box .footer .btn {
+      margin: auto; }
+    body .visualizer-box .footer .title {
+      text-align: center;
+      margin: auto;
+      font-size: x-large; }
   body .input-box {
     margin: 7% auto;
     width: 560px; }
@@ -5853,7 +5876,7 @@ body {
     margin: 7% auto;
     width: 320px; }
     body .loader-box .loader-title {
-      font-size: 35px;
+      font-size: 50px;
       text-align: center;
       margin-bottom: 25px;
       font-weight: 300; }
@@ -5868,7 +5891,7 @@ body {
       width: 20px;
       height: 20px;
       border-radius: 100%;
-      background-color: #3498db;
+      background-color: white;
       margin: 35px 5px; }
     body .loader-box #loader-2 span:nth-child(1) {
       animation: bounce 1s ease-in-out infinite; }

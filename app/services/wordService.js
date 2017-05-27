@@ -57,6 +57,7 @@ angular.module("wordApp").factory("wordService", ["$http", "$q", "$timeout",
                 label: synset.id,
                 group: "synset",
                 value: 1,
+                name: synset.name
             });
         }
     }
