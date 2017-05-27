@@ -29,10 +29,17 @@ body {
   .visualizer-box {
     .visualizer{
       position: fixed;
-      top: 55px;
+      top: 0px;
       bottom: 0px;
       left: 0px;
       right: 0px;
+    }
+
+    .chart-container {
+      position: relative;
+      height:125px;
+      display: flex;
+      margin: auto 50px;
     }
 
     .footer {

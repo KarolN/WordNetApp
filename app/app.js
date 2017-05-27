@@ -1,7 +1,7 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-angular.module('wordApp', [
+angular.module('wordApp', ["chart.js"
 ]);
 
 String.prototype.hashCode = function() {

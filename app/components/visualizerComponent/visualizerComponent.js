@@ -4,17 +4,28 @@ function VisualizerComponentController ($scope, wordService, mockService, $timeo
     $scope.loader = true;
     $scope.nodeGroup = "Select any node...";
     $scope.name = "Select synset...";
-    $scope.labels =["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"];
-
-    $scope.data = [
-      [65, 59, 90, 81, 56, 55, 40],
-      [28, 48, 40, 19, 96, 27, 100]
-    ];
 
     var data = {};
 
     var highlightActive = false;
     var nodesDataset;
+
+    this.groupBy = function(arr, key) {
+          var newArr = [],
+              Keys = {},
+              newItem, i, j, cur;
+          for (i = 0, j = arr.length; i < j; i++) {
+            cur = arr[i];              
+            if(cur[key] != 'synset'){
+              if (!(cur[key] in Keys)) {
+                  Keys[cur[key]] = { type: cur[key], data: [] };
+                  newArr.push(Keys[cur[key]]);
+              }
+              Keys[cur[key]].data.push(cur);
+            }
+          }
+          return newArr;
+    }
 
     var options = {
         height: '100%',
@@ -108,8 +119,40 @@ function VisualizerComponentController ($scope, wordService, mockService, $timeo
 
         wordService.getWordData(this.textToVisualize, loadingOptions).then(function(loadedData){
             $scope.loader = false;
+
+            //Getting data for vis.js
             data = {edges: new vis.DataSet(loadedData.edges), nodes: new vis.DataSet(loadedData.nodes)};
             self.createGraph($scope.loader);
+            
+            //Getting data for chart.js
+            var groupedNodes = self.groupBy(loadedData.nodes, 'group');         
+            var chartLabels = groupedNodes.map(function(group) {
+                return group.type;
+            })
+            var chartData = groupedNodes.map(function(group) {           
+                return group.data.length;
+            })
+
+            //Charts props
+            $scope.labels = chartLabels;
+            $scope.series = "Suma";     
+            $scope.data = chartData;
+            $scope.options ={
+                scales:
+                {
+                    xAxes: [{
+                        display: false
+                    }],
+                    yAxes:[
+                        {
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }
+                    ]
+                }
+            };
+            /////////////
         });
     }
 }
