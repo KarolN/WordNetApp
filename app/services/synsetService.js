@@ -30,10 +30,12 @@ angular.module("wordApp").factory("synsetService", ["$q", "dataService", functio
             dataService.getSynsets(wordIds).then(function (synsets) {
                 var allSysnsets = parseSynsetsIdsAndNames(input);
                 _.each(synsets.data, function (synset) {
+                    if(synset.results){
                     var word = _.find(allSysnsets, function(x){
                         return x.id == synset.results.id;
                     });
                     word.name = synset.results.str;
+                    }
                 });
                 resolve(input);
             });
