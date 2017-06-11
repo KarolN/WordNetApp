@@ -6,11 +6,12 @@ function VisualizerComponentController ($scope, wordService, mockService, $timeo
     $scope.name = "Select synset...";
 
     var data = {};
+    var network;
 
     var highlightActive = false;
     var nodesDataset;
 
-    this.groupBy = function(arr, key) {
+    this.groupBy = function(arr, key) { // HelperMethod
           var newArr = [],
               Keys = {},
               newItem, i, j, cur;
@@ -44,6 +45,38 @@ function VisualizerComponentController ($scope, wordService, mockService, $timeo
           }
         }
     };
+
+    $scope.onChartClick = function(param) {
+        var selectedGroup = param[0]._model.label    
+        var allNodes = nodesDataset.get({returnType: "Object"});        
+
+        if(selectedGroup != void 0) {
+            highlightActive = true;
+
+            for (var nodeId in allNodes) {
+              if(allNodes[nodeId].group !== selectedGroup){
+                allNodes[nodeId].color = 'rgba(200,200,200,0.5)';
+              }
+              else {
+                allNodes[nodeId].color = undefined;
+              }
+            }
+        } 
+        else if (highlightActive === true) {
+            for (var nodeId in allNodes) {
+                allNodes[nodeId].color = undefined;
+            }
+            highlightActive = false
+        }
+
+        var updateArray = [];
+        for (nodeId in allNodes) {
+            if (allNodes.hasOwnProperty(nodeId)) {
+                updateArray.push(allNodes[nodeId]);
+            }
+        }
+        nodesDataset.update(updateArray);
+    }
 
     this.neighbourhoodHighlight = function(params) {
         var allNodes = nodesDataset.get({returnType: "Object"});
@@ -97,7 +130,7 @@ function VisualizerComponentController ($scope, wordService, mockService, $timeo
       if(!loader) {
           $timeout(function() {
               var container = document.getElementById('wordNetwork');
-              var network = new vis.Network(container, data, options);
+              network = new vis.Network(container, data, options);
               nodesDataset = data.nodes;
 
               network.on("click", self.neighbourhoodHighlight);
@@ -108,6 +141,32 @@ function VisualizerComponentController ($scope, wordService, mockService, $timeo
 
     $scope.redirect = function () {
         self.onRedirect();
+    }
+
+    $scope.getWordDataWithConnectors = function () {
+        var loadingOptions = {
+            bypassCache : true,
+            includeSynsets: true,
+            includeConnectors: true
+        };
+        wordService.getWordData(self.textToVisualize, loadingOptions).then(function(loadedData){
+            data = {edges: new vis.DataSet(loadedData.edges), nodes: new vis.DataSet(loadedData.nodes)};
+            network.destroy();
+            self.createGraph($scope.loader);
+        });
+    }
+
+    $scope.getWordDataWithoutConnectors = function () {
+        var loadingOptions = {
+            bypassCache : true,
+            includeSynsets: true,
+            includeConnectors: false
+        };
+        wordService.getWordData(self.textToVisualize, loadingOptions).then(function(loadedData){
+            data = {edges: new vis.DataSet(loadedData.edges), nodes: new vis.DataSet(loadedData.nodes)};
+            network.destroy();
+            self.createGraph($scope.loader);
+        });
     }
 
     this.$onInit = function() {

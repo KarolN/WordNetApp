@@ -12,8 +12,16 @@ body {
     border-width: 1px;
   }
 
+  .btn-group {
+    margin: -3px 0px 0px auto;
+  }
+
   .margin-top-small{
     margin-top: 5px;
+  }
+
+  a{
+    color: white
   }
 
   .flex-column-container{
@@ -23,6 +31,10 @@ body {
 
   .flex-container{
     display: flex;
+  }
+
+  .text-center{
+    vertical-align: -webkit-baseline-middle;
   }
 
   //Visualization
@@ -39,7 +51,7 @@ body {
       position: relative;
       height:125px;
       display: flex;
-      margin: auto 50px;
+      margin: 15px 15px 0px auto;
     }
 
     .footer {
