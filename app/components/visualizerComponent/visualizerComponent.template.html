@@ -16,6 +16,15 @@
     <div class="row flex-container footer">
         <div class="flex-column-container col-xs-2">
             <span class="title"><b>Word</b>APP</span>
+            <div class="flex-container">
+                <div>
+                    <span class="text-center">Pobierz łączniki zdań: </span>
+                </div>
+                <div class="btn-group" role="group" aria-label="...">
+                    <button ng-click="getWordDataWithConnectors()" type="button" class="btn btn-primary btn-flat">Tak</button>
+                    <button ng-click="getWordDataWithoutConnectors()" type="button" class="btn btn-primary btn-flat">Nie</button>
+                </div>
+            </div>
             <button ng-click="redirect()" class="btn btn-primary btn-block btn-flat">Powrót</button>
         </div>
         <div class="details-container">
@@ -34,13 +43,15 @@
                     Nazwa: {{name}}
                 </span>
             </div>
+            <div class="margin-top-small">
+                <a href="http://www.pudelek.pl/" target="_blank">
+                    Najlepszy link !!!!1111
+                </a>
+            </div>
         </div>
-        <div class="details-container">
-            <span class="header">Wykres grup: </span>
-        </div>
-        <div class="chart-container">
+        <div class="chart-container">        
             <canvas id="bar" class="chart chart-bar"
-              chart-data="data" chart-labels="labels" chart-options="options" chart-series="series">
+              chart-data="data" chart-click="onChartClick" chart-labels="labels" chart-options="options" chart-series="series">
             </canvas
         </div>
     </div>

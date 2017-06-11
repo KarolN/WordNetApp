@@ -5822,13 +5822,19 @@ body {
     border-radius: 0;
     box-shadow: none;
     border-width: 1px; }
+  body .btn-group {
+    margin: -3px 0px 0px auto; }
   body .margin-top-small {
     margin-top: 5px; }
+  body a {
+    color: white; }
   body .flex-column-container {
     display: flex;
     flex-direction: column; }
   body .flex-container {
     display: flex; }
+  body .text-center {
+    vertical-align: -webkit-baseline-middle; }
   body .visualizer-box .visualizer {
     position: fixed;
     top: 0px;
@@ -5839,7 +5845,7 @@ body {
     position: relative;
     height: 125px;
     display: flex;
-    margin: auto 50px; }
+    margin: 15px 15px 0px auto; }
   body .visualizer-box .footer {
     position: fixed;
     width: 100%;
